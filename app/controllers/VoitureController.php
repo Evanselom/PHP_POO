@@ -1,12 +1,18 @@
 <?php
-require_once __DIR__ .'/../models/Voiture.php';
+require_once __DIR__ .'/../repositories/VoitureRepository.php';
 
 class VoitureController
 {
+    private $voitureRepository;
+
+    public function __construct()
+    {
+        $this->voitureRepository = new VoitureRepository();
+    }
     // Afficher toutes les voitures
     public function index()
     {
-        $voitures = Voiture::getAll();
+        $voitures = $this->voitureRepository->getAll();
         include __DIR__ .'/../views/voitureList.php';
     }
 
@@ -19,8 +25,8 @@ class VoitureController
             $prix = $_POST['prix'];
             $annee = $_POST['annee'];
 
-            $voiture = new Voiture(null,$marque, $modele, $prix,$annee);
-            $voiture->addNew();
+            $voiture = new Voiture(null, $marque, $modele, $prix, $annee);
+            $this->voitureRepository->add($voiture);
            // Voiture::add($marque, $modele, $prix,$annee);
             header('Location: /');
         } else {
