@@ -61,8 +61,9 @@ class Voiture
     }
 
     // Method to fetch all cars from the database
-    public static function getAll()
-    {
+    public static function getAll(): array
+{
+    try {
         $conn = Database::getConnection();
         $sql = "SELECT * FROM voitures";
         $stmt = $conn->prepare($sql);
@@ -73,11 +74,18 @@ class Voiture
             $voitures[] = new Voiture($row['id'], $row['marque'], $row['modele'], $row['prix'], $row['annee']);
         }
 
+        // Return array of Voiture objects
         return $voitures;
+    } catch (Exception $e) {
+        // Log the error message
+        error_log("Error fetching all cars: " . $e->getMessage());
+        // Return an empty array in case of error
+        return [];
     }
+}
 
     // Method to add a car to the database
-    public function add()
+    public function addNew()
     {
         $conn = Database::getConnection();
         $sql = "INSERT INTO voitures (marque, modele, prix, annee) VALUES (:marque, :modele, :prix, :annee)";
@@ -102,7 +110,3 @@ class Voiture
         $stmt->execute();
     }
 }
-
-// Usage example
-//$voiture = new Voiture(null, 'Toyota', 'Corolla', 20000, 2022);
-//$voiture->add();

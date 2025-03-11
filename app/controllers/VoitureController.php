@@ -18,7 +18,10 @@ class VoitureController
             $modele = $_POST['modele'];
             $prix = $_POST['prix'];
             $annee = $_POST['annee'];
-            Voiture::add($marque, $modele, $prix,$annee);
+
+            $voiture = new Voiture(null,$marque, $modele, $prix,$annee);
+            $voiture->addNew();
+           // Voiture::add($marque, $modele, $prix,$annee);
             header('Location: /');
         } else {
             include __DIR__ .'/../views/voitureForm.php';

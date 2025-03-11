@@ -6,9 +6,11 @@ class Database
     public static function getConnection()
     {
         if (self::$conn === null) {
-            self::$conn = new mysqli('localhost', 'root', 'root', 'voiture_db');
-            if (self::$conn->connect_error) {
-                die("Connection failed: " . self::$conn->connect_error);
+            try {
+                self::$conn = new PDO('mysql:host=localhost;dbname=voiture_db', 'root', 'root');
+                self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            } catch (PDOException $e) {
+                die("Connection failed: " . $e->getMessage());
             }
         }
 
@@ -52,4 +54,27 @@ class Database
 //         return $this->pdo;
 //     }
 // }
-// ?>
+// 
+// 
+// 
+/*
+mysqli example
+
+class Database
+{
+    private static $conn = null;
+
+    public static function getConnection()
+    {
+        if (self::$conn === null) {
+            self::$conn = new mysqli('localhost', 'root', 'root', 'voiture_db');
+            if (self::$conn->connect_error) {
+                die("Connection failed: " . self::$conn->connect_error);
+            }
+        }
+
+        return self::$conn;
+    }
+}
+*/
+?>
